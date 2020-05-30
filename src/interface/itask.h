@@ -6,8 +6,7 @@
     @author Eyas Kopty
 */
 
-#ifndef ITASK_H
-#define ITASK_H
+#pragma once
 
 #include <condition_variable>
 #include <mutex>
@@ -78,4 +77,3 @@ public:
 
     virtual ~ITask();
 };
-#endif // ITASK_H

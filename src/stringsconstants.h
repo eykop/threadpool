@@ -1,5 +1,4 @@
-#ifndef STRINGSCONSTANTS_H
-#define STRINGSCONSTANTS_H
+#pragma once
 
 #include <string>
 class StringsConstants{
@@ -33,5 +32,3 @@ const std::string StringsConstants::RequestForInRangeThreadNumberMessage ="Pleas
 const std::string StringsConstants::UnknownCommnadMessage ="Opps, You have provided an unknown option please provide on of the following : stop , pause, resume or status \r\n"
                                                            "followed by whitespace followed by the thread number.";
 const std::string StringsConstants::DoneMessage = "All threads are done running the tasks while waiting for user input, will ignore command and exit now.";
-
-#endif // STRINGSCONSTANTS_H

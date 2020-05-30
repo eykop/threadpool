@@ -6,10 +6,10 @@
 
     @author Eyas Kopty
 */
-#ifndef FILEREADERTASK_H
-#define FILEREADERTASK_H
 
-#include "itask.h"
+#pragma once
+#include "src/interface/itask.h"
+
 #include <string>
 #include <fstream>
 #include <vector>
@@ -40,5 +40,3 @@ public:
     FileReaderTask(const std::string& filePath);
     virtual ~FileReaderTask();
 };
-
-#endif // FILEREADERTASK_H

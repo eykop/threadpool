@@ -1,4 +1,6 @@
-#include "filewrittertask.h"
+#include "src/workers/filewrittertask.h"
+
+#include <thread>
 
 FileWritterTask::FileWritterTask(const std::string& filePath, const int requiredFileSize) :
     mFilePath(filePath), mFileSize(requiredFileSize){

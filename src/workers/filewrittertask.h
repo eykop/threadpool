@@ -1,7 +1,6 @@
-#ifndef FILEWRITTERTASK_H
-#define FILEWRITTERTASK_H
+#pragma once
+#include "src/interface/itask.h"
 
-#include "itask.h"
 #include <string>
 #include <fstream>
 #include <vector>
@@ -25,5 +24,3 @@ public:
     FileWritterTask(const std::string& filePath, const int requiredFileSize);
     virtual ~FileWritterTask();
 };
-
-#endif // FILEWRITTERTASK_H

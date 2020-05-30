@@ -1,5 +1,6 @@
 #include "countertask.h"
 #include "thread"
+
 CounterTask::CounterTask(const int counter) : ITask(),  mCounter(counter){
 
 }

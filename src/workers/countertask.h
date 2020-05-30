@@ -7,10 +7,9 @@
     @author Eyas Kopty
 */
 
-#ifndef COUNTERTASK_H
-#define COUNTERTASK_H
+#pragma once
 
-#include "itask.h"
+#include "src/interface/itask.h"
 
 class CounterTask : public ITask
 {
@@ -27,5 +26,3 @@ public:
     virtual ~CounterTask();
 
 };
-
-#endif // COUNTERTASK_H

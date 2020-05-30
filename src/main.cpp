@@ -1,12 +1,14 @@
+#include "threadpool.h"
+#include "src/workers/filereadertask.h"
+#include "stringsconstants.h"
+
+#include <string>
+
 #include <QCoreApplication>
 #include <QCommandLineOption>
 #include <QCommandLineParser>
 #include <QString>
 
-#include "threadpool.h"
-#include <string>
-#include "filereadertask.h"
-#include "stringsconstants.h"
 
 int main(int argc, char *argv[])
 {

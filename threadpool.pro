@@ -14,17 +14,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-SOURCES += main.cpp \
-    countertask.cpp \
-    filereadertask.cpp \
-    filewrittertask.cpp \
-    itask.cpp \
-    threadpool.cpp
+SOURCES += src/main.cpp \
+    src/workers/countertask.cpp \
+    src/workers/filereadertask.cpp \
+    src/workers/filewrittertask.cpp \
+    src/interface/itask.cpp \
+    src/threadpool.cpp
 
 HEADERS += \
-    countertask.h \
-    filereadertask.h \
-    filewrittertask.h \
-    itask.h \
-    stringsconstants.h \
-    threadpool.h
+    src/workers/countertask.h \
+    src/workers/filereadertask.h \
+    src/workers/filewrittertask.h \
+    src/interface/itask.h \
+    src/stringsconstants.h \
+    src/threadpool.h

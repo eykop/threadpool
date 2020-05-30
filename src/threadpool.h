@@ -7,8 +7,8 @@
     @author Eyas Kopty
 */
 
-#ifndef THREADPOOL_H
-#define THREADPOOL_H
+#pragma once
+#include "src/interface/itask.h"
 
 #include <vector>
 #include <queue>
@@ -19,7 +19,6 @@
 #include <memory>
 #include <thread>
 
-#include "itask.h"
 
 class ThreadPool
 {
@@ -100,5 +99,3 @@ public:
 
 
 };
-
-#endif // THREADPOOL_H

@@ -1,5 +1,8 @@
 #include "filereadertask.h"
+
 #include <sstream>
+#include <thread>
+
 FileReaderTask::FileReaderTask(const std::string& filePath)
 {
 

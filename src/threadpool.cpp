@@ -8,9 +8,9 @@
 */
 
 #include "threadpool.h"
-#include "filereadertask.h"
-#include "filewrittertask.h"
-#include "countertask.h"
+#include "src/workers/filereadertask.h"
+#include "src/workers/filewrittertask.h"
+#include "src/workers/countertask.h"
 
 int ThreadPool::getNumberOfCurrentRunningThreads() const
 {
