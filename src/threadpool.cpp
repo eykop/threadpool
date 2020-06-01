@@ -12,14 +12,13 @@
 #include "src/workers/filewrittertask.h"
 #include "src/workers/countertask.h"
 
+ThreadPool::ThreadPool(int numberOfThreads) : mNumberOfThreads(numberOfThreads){
+    mThreads.reserve(numberOfThreads);
+}
+
 int ThreadPool::getNumberOfCurrentRunningThreads() const
 {
     return mNumberOfThreads;
-}
-
-
-ThreadPool::ThreadPool(int numberOfThreads) : mNumberOfThreads(numberOfThreads){
-    mThreads.reserve(numberOfThreads);
 }
 
 void ThreadPool::startPool(){

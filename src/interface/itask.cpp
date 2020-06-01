@@ -1,9 +1,5 @@
 #include "itask.h"
 
-ITask::ITask()
-{
-
-}
 
 void ITask::pause() {
     std::lock_guard<std::mutex> lkg(mStateMutex);

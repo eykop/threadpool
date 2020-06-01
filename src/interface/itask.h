@@ -17,7 +17,7 @@
 class ITask{
 
 protected:
-    enum STATUS { INITIALIZED, RUNNING, PAUSED, STOPPED, FINISHED };
+    enum class STATUS { INITIALIZED, RUNNING, PAUSED, STOPPED, FINISHED };
     std::condition_variable mStateCondtionVar;
     std::mutex mStateMutex;
     bool mPaused = false;
@@ -25,7 +25,10 @@ protected:
     STATUS mStatus = STATUS::INITIALIZED;
 
 public:
-    ITask();
+    ITask() = default;
+    ITask& operator=(const ITask&) = delete;
+    ITask(const ITask&) = delete;
+
 
     /**
         Pure method, inherting classes must implement this methoid, this were
@@ -36,7 +39,7 @@ public:
 
         @return bool, ture if there is more work to do, false if work is done.
     */
-    virtual bool doWork() = 0;
+    [[nodiscard]] virtual bool doWork() = 0;
 
 
     /**
@@ -67,7 +70,7 @@ public:
         Query task status.
         @return std::string, task status.
     */
-    std::string status();
+    [[nodiscard]] std::string status();
 
     /**
         Run the tasks, entry point where we start running the task.

@@ -36,6 +36,8 @@ public:
     */
     ThreadPool(int numberOfThreads);
     ThreadPool(const ThreadPool& other) = delete;
+    ThreadPool& operator=(const ThreadPool& other) = delete ;
+
 
     /**
         startPool a thread  pool while assignig tasks to required threads.
@@ -73,7 +75,7 @@ public:
         @param tId int, the thread id which we want to get its status.
         @return std::string, thread status.
     */
-    std::string getThreadStatus(int tId);
+    [[nodiscard]] std::string getThreadStatus(int tId);
 
     /**
         Starts a thread while running provided task.
@@ -87,13 +89,13 @@ public:
         Check if all threads are done.
         @return bool, true if all threads are done false otherwise
     */
-    bool waitForAllToBeFinished();
+    [[nodiscard]] bool waitForAllToBeFinished();
 
     /**
         Return current number of running threads.
         @return int, current number of running threads.
     */
-    int getNumberOfCurrentRunningThreads() const;
+    [[nodiscard]] int getNumberOfCurrentRunningThreads() const;
 
     ~ThreadPool();
 
