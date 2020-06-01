@@ -83,7 +83,7 @@ public:
         @param ITask shared pointer, the task the thread should run.
         @return void.
     */
-    void startThread(int tId, std::shared_ptr<ITask> task);
+    void startThread(int tId, std::unique_ptr<ITask> task);
 
     /**
         Check if all threads are done.

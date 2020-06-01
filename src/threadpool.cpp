@@ -24,33 +24,35 @@ int ThreadPool::getNumberOfCurrentRunningThreads() const
 void ThreadPool::startPool(){
 
     for(int i = 0; i < mNumberOfThreads ; i++){
-        std::shared_ptr<ITask> tsk_shptr;
+        std::unique_ptr<ITask> tsk_shptr;
         if (i >= 0 && i < 3){
             std::cout<<"create counter"<<std::endl;
-            tsk_shptr = std::make_shared<CounterTask>(30);
-            mThreads.push_back(std::thread(&ThreadPool::startThread, this, i, tsk_shptr));
+            tsk_shptr = std::make_unique<CounterTask>(30);
+            mThreads.push_back(std::thread(&ThreadPool::startThread, this, i, std::move(tsk_shptr)));
         }else if (i >= 3 && i < 6){
             std::cout<<"create file writter"<<std::endl;
-            tsk_shptr = std::make_shared<FileWritterTask>(std::string("largeFile"+std::to_string(i)+".txt"), 1000000000);
-            mThreads.push_back(std::thread(&ThreadPool::startThread, this, i, tsk_shptr));
+            tsk_shptr = std::make_unique<FileWritterTask>(std::string("largeFile"+std::to_string(i)+".txt"), 1000000000);
+            mThreads.push_back(std::thread(&ThreadPool::startThread, this, i, std::move(tsk_shptr)));
         }
         else{
             std::cout<<"create file reader"<<std::endl;
-            tsk_shptr = std::make_shared<FileReaderTask>("largeFile.txt");
-            mThreads.push_back(std::thread(&ThreadPool::startThread, this, i, tsk_shptr));
+            tsk_shptr = std::make_unique<FileReaderTask>("largeFile.txt");
+            mThreads.push_back(std::thread(&ThreadPool::startThread, this, i, std::move(tsk_shptr)));
         }
     }
 
 }
 
-void ThreadPool::startThread(int tId, std::shared_ptr<ITask> task){
+void ThreadPool::startThread(int tId, std::unique_ptr<ITask> task){
+            //here we invoke the task!
+            task->run();
+
             {
                 //lock to access map...
                 std::unique_lock<std::mutex> ulk(mMutex);
-                mTasksMap.emplace(tId, task);
+                mTasksMap.emplace(tId, std::move(task));
             }
-            //here we invoke the task!
-            task->run();
+
 
             {
                 std::unique_lock<std::mutex> ulk(mMutex);
