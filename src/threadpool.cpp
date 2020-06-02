@@ -44,21 +44,17 @@ void ThreadPool::startPool(){
 }
 
 void ThreadPool::startThread(int tId, std::unique_ptr<ITask> task){
-            //here we invoke the task!
-            task->run();
 
-            {
-                //lock to access map...
-                std::unique_lock<std::mutex> ulk(mMutex);
-                mTasksMap.emplace(tId, std::move(task));
-            }
+    //here we invoke the task!
+    task->run();
 
+    {
+        //lock to access map...
+        std::unique_lock<std::mutex> ulk(mMutex);
+        mTasksMap.emplace(tId, std::move(task));
+        --mNumberOfThreads;
 
-            {
-                std::unique_lock<std::mutex> ulk(mMutex);
-                --mNumberOfThreads;
-
-            }
+    }
 
 }
 
@@ -80,8 +76,8 @@ ThreadPool::~ThreadPool(){
 
 }
 
+// will pasue thread if its only in a runnung status otherwise it will ignore request and prompt user.
 void ThreadPool::pauseThread(int tId){
-    //will pasue thread if its only in a runnung status otherwise it will ignore request and prompt user.
     if(mTasksMap[tId] != nullptr && mTasksMap[tId]->status() == "Running"){
         mTasksMap[tId]->pause();
     }else{
@@ -89,8 +85,8 @@ void ThreadPool::pauseThread(int tId){
     }
 }
 
+// will reumse thread if its only in a paused status otherwise it will ignore request and prompt user.
 void ThreadPool::resumeThread(int tId){
-    //will reumse thread if its only in a paused status otherwise it will ignore request and prompt user.
     if(mTasksMap[tId] != nullptr && mTasksMap[tId]->status() == "Paused"){
         mTasksMap[tId]->resume();
     }else{
@@ -98,8 +94,9 @@ void ThreadPool::resumeThread(int tId){
     }
 }
 
+// will reumse thread if its only in a not stopped status, otherwise if a thread is already stopped it will ignore request
+// and prompt user.
 void ThreadPool::stopThread(int tId){
-    //will reumse thread if its only in a not stopped status, otherwise if a thread is already stopped it will ignore request and prompt user.
     if(mTasksMap[tId] != nullptr && mTasksMap[tId]->status() != "Stopped" && mTasksMap[tId]->status() != "Finished"){
         mTasksMap[tId]->stop();
     }else{
