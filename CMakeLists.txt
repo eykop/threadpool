@@ -13,10 +13,10 @@ find_package(Qt5 COMPONENTS Core REQUIRED)
 
 
 add_executable(${PROJECT_NAME}
-   "src/main.cpp" "src/threadpool.h" "src/threadpool.cpp" "src/stringsconstants.h"
+   "src/main.cpp" "src/threadpool.h" "src/threadpool.cpp" "src/stringsconstants.h" "src/stringconstands.cpp"
    "src/interface/itask.h" "src/interface/itask.cpp" "src/workers/countertask.h" 
    "src/workers/countertask.cpp" "src/workers/filereadertask.h" "src/workers/filereadertask.cpp"
-   "src/workers/filewrittertask.h" "src/workers/filewrittertask.cpp"
+   "src/workers/filewrittertask.h" "src/workers/filewrittertask.cpp" "src/userinpututils.h" "src/userinpututils.cpp"
 )
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)

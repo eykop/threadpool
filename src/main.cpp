@@ -1,6 +1,7 @@
 #include "threadpool.h"
 #include "src/workers/filereadertask.h"
 #include "stringsconstants.h"
+#include "userinpututils.h"
 
 #include <string>
 
@@ -10,82 +11,68 @@
 #include <QString>
 
 
-int main(int argc, char *argv[])
+
+void manageThreadPool(ThreadPool& tp)
 {
+    while(!tp.finished()){
 
-    QCoreApplication app(argc, argv);
-    QCommandLineParser parser;
-    parser.setApplicationDescription(StringsConstants::HelpMessage.c_str());
-    parser.addHelpOption();
+        const auto userThreadCommand = userinpututils::getUserThreadCommandInput();
 
-    const QCommandLineOption threadCountOption("threads",
-                                               StringsConstants::ThreadCountOptionDescription.c_str(),
-                                               "threads");
-    parser.addOption(threadCountOption);
-    parser.process(app);
-
-    const QStringList args = parser.optionNames();
-    if (args.size() < 1) {
-        std::cerr<<"Error: Please specify an argument."<<std::endl;
-        parser.showHelp(1);
-        return 1;
-    }
-
-    int threadCount = 0;
-    threadCount  = parser.value("threads").toInt();
-    if (threadCount == 0){
-        std::cerr<<"You have provided : '"<<parser.value("threads").toStdString()
-                <<StringsConstants::InvalidThreadCountInputErrorMessage<<std::endl;
-        parser.showHelp(1);
-        return 1;
-    }
-
-    ThreadPool tp(threadCount);
-    tp.startPool();
-    while(!tp.waitForAllToBeFinished()){
-
-        //get command until whitespace.
-        std::string inputCommand;
-        std::cout<<StringsConstants::RequestForInputMessage<<std::endl;
-        std::cout<<StringsConstants::HelpMessage<<std::endl;
-        std::getline(std::cin, inputCommand, ' ');
-
-        //get treadid after whitespace and until new line.
-        std::string threadNumber;
-        std::getline(std::cin, threadNumber);
-        std::cout<<"you have choosed to: '"<<inputCommand<<"' '" <<threadNumber<<"'."<<std::endl;;
-
-        //check if number is convertable to int!
-        int intThreadNumber = -1;
-        try{
-            intThreadNumber = std::stoi(threadNumber);
-        }catch(std::invalid_argument &ia){
-            std::cout<<StringsConstants::RequestForValidThreadNumberMessage<<threadNumber<<"'"<<std::endl;
+        if (userThreadCommand.threadIndex+1 > tp.threadsCount()){
+            std::cout<<StringsConstants::RequestForInRangeThreadNumberMessage<<userThreadCommand.threadIndex<<"'"<<std::endl;
             continue;
         }
 
-        if (intThreadNumber+1 > threadCount){
-            std::cout<<StringsConstants::RequestForInRangeThreadNumberMessage<<intThreadNumber<<"'"<<std::endl;
-            continue;
+        switch (userThreadCommand.command) {
+
+        case userinpututils::ThreadCommand::PAUSE:{
+            tp.pauseThread(userThreadCommand.threadIndex);
+            break;
         }
-        if (inputCommand == "pause"){
-            tp.pauseThread(intThreadNumber);
-        }else if (inputCommand == "status"){
-            std::cout<<"The thread number: '"<<intThreadNumber<<"' status is : '"
-                    <<tp.getThreadStatus(intThreadNumber)<<"'"<<std::endl;
-        }else if (inputCommand == "resume"){
-            tp.resumeThread(intThreadNumber);
-        }else if (inputCommand == "stop"){
-            tp.stopThread(intThreadNumber);
-        }else{
+        case userinpututils::ThreadCommand::RESUME:{
+            tp.resumeThread(userThreadCommand.threadIndex);
+            break;
+        }
+        case userinpututils::ThreadCommand::STATUS:{
+            std::cout<<"The thread number: '"<<userThreadCommand.threadIndex<<"' status is : '"
+                    <<tp.getThreadStatus(userThreadCommand.threadIndex)<<"'"<<std::endl;
+            break;
+        }
+        case userinpututils::ThreadCommand::STOP:{
+            tp.stopThread(userThreadCommand.threadIndex);
+            break;
+        }
+        case userinpututils::ThreadCommand::INVALID:{
             std::cout<<StringsConstants::UnknownCommnadMessage<<std::endl;
+            break;
         }
-        if(tp.getNumberOfCurrentRunningThreads() == 0){
+
+        }
+
+        //to do std::bind to notirfy of done for each thread instead of looping!
+        if(tp.finished()){
             std::cout<<StringsConstants::DoneMessage<<std::endl;
             break;
         }
     }
-    std::cout<<"done : "<<tp.getNumberOfCurrentRunningThreads()<<std::endl;
+}
 
-    return 0;//app.exec();
+int main(int argc, char *argv[])
+{
+
+    QCoreApplication app(argc, argv);
+    const auto parser = userinpututils::defineCommandLineParser(app);
+    auto commandArgsParsingResult = userinpututils::parseCommandLineArgumnets(parser);
+
+    if(!commandArgsParsingResult.successOnParsing){
+       return 1;
+    }
+
+    const auto threadCount = commandArgsParsingResult.numberOfThreads;
+    ThreadPool tp(threadCount);
+    tp.startPool();
+    manageThreadPool(tp);
+    std::cout<<"done : "<<tp.threadsCount()<<std::endl;
+
+    return app.exec();
 }
