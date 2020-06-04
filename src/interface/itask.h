@@ -12,6 +12,8 @@
 #include <mutex>
 #include <string>
 #include <iostream>
+#include <functional>
+
 
 
 class ITask{
@@ -23,11 +25,13 @@ protected:
     bool mPaused = false;
     bool mStopped = false;
     STATUS mStatus = STATUS::INITIALIZED;
+    std::function<void()> mNotifyOnfinished  = nullptr;
 
 public:
     ITask() = default;
     ITask& operator=(const ITask&) = delete;
     ITask(const ITask&) = delete;
+
 
 
     /**
@@ -79,4 +83,10 @@ public:
     virtual void run();
 
     virtual ~ITask();
+
+    /**
+     * @brief Sets the callback to notify when task is finished
+     * @param notifyOnfinished
+     */
+    void setNotifyOnfinished(const std::function<void()> notifyOnfinished);
 };

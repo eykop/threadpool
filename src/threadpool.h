@@ -27,7 +27,8 @@ private:
     std::vector<std::thread> mThreads;
     std::mutex mMutex;
     std::unordered_map<int,std::unique_ptr<ITask>> mTasksMap;
-    int mNumberOfThreads = 0;
+    int mThreadsCount = 0;
+    int mFinishedThreadsCount = 0;
     std::condition_variable mStartContion;
 
 public:
@@ -89,13 +90,23 @@ public:
         Check if all threads are done.
         @return bool, true if all threads are done false otherwise
     */
-    [[nodiscard]] bool waitForAllToBeFinished();
+    [[nodiscard]] bool waitForAllToBeFinished() const;
 
     /**
         Return current number of running threads.
         @return int, current number of running threads.
     */
-    [[nodiscard]] int getNumberOfCurrentRunningThreads() const;
+    [[nodiscard]] int threadsCount() const;
+
+    /**
+      Updates finsihed threads count.
+    */
+    void updateFishiedCount();
+
+    /**
+      Check if all threads in pool are finsihed or not.
+    */
+    [[nodiscard]] bool finished() const;
 
     ~ThreadPool();
 

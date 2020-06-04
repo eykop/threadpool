@@ -12,31 +12,50 @@
 #include "src/workers/filewrittertask.h"
 #include "src/workers/countertask.h"
 
-ThreadPool::ThreadPool(int numberOfThreads) : mNumberOfThreads(numberOfThreads){
+ThreadPool::ThreadPool(int numberOfThreads) : mThreadsCount(numberOfThreads){
     mThreads.reserve(numberOfThreads);
 }
 
-int ThreadPool::getNumberOfCurrentRunningThreads() const
+int ThreadPool::threadsCount() const
 {
-    return mNumberOfThreads;
+    return mThreadsCount;
+}
+
+void ThreadPool::updateFishiedCount()
+{
+    {
+        //lock to access map...
+        std::unique_lock<std::mutex> ulk(mMutex);
+        mFinishedThreadsCount++;
+
+    }
+}
+
+bool ThreadPool::finished() const
+{
+    std::cout<<"all finished \n";
+    return mFinishedThreadsCount == mThreadsCount;
 }
 
 void ThreadPool::startPool(){
 
-    for(int i = 0; i < mNumberOfThreads ; i++){
+    for(int i = 0; i < mThreadsCount ; i++){
         std::unique_ptr<ITask> tsk_shptr;
         if (i >= 0 && i < 3){
             std::cout<<"create counter"<<std::endl;
             tsk_shptr = std::make_unique<CounterTask>(30);
+            tsk_shptr->setNotifyOnfinished(std::bind(&ThreadPool::updateFishiedCount, this));
             mThreads.push_back(std::thread(&ThreadPool::startThread, this, i, std::move(tsk_shptr)));
         }else if (i >= 3 && i < 6){
             std::cout<<"create file writter"<<std::endl;
             tsk_shptr = std::make_unique<FileWritterTask>(std::string("largeFile"+std::to_string(i)+".txt"), 1000000000);
+            tsk_shptr->setNotifyOnfinished(std::bind(&ThreadPool::updateFishiedCount, this));
             mThreads.push_back(std::thread(&ThreadPool::startThread, this, i, std::move(tsk_shptr)));
         }
         else{
             std::cout<<"create file reader"<<std::endl;
             tsk_shptr = std::make_unique<FileReaderTask>("largeFile.txt");
+            tsk_shptr->setNotifyOnfinished(std::bind(&ThreadPool::updateFishiedCount, this));
             mThreads.push_back(std::thread(&ThreadPool::startThread, this, i, std::move(tsk_shptr)));
         }
     }
@@ -49,7 +68,6 @@ void ThreadPool::startThread(int tId, std::unique_ptr<ITask> task){
         //lock to access map...
         std::unique_lock<std::mutex> ulk(mMutex);
         mTasksMap.emplace(tId, std::move(task));
-        --mNumberOfThreads;
 
     }
 
@@ -57,9 +75,9 @@ void ThreadPool::startThread(int tId, std::unique_ptr<ITask> task){
 
 }
 
-bool ThreadPool::waitForAllToBeFinished(){
+bool ThreadPool::waitForAllToBeFinished() const{
 
-    return (mNumberOfThreads == 0);
+    return (mThreadsCount == 0);
 }
 
 /**
