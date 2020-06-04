@@ -45,9 +45,6 @@ void ThreadPool::startPool(){
 
 void ThreadPool::startThread(int tId, std::unique_ptr<ITask> task){
 
-    //here we invoke the task!
-    task->run();
-
     {
         //lock to access map...
         std::unique_lock<std::mutex> ulk(mMutex);
@@ -55,6 +52,8 @@ void ThreadPool::startThread(int tId, std::unique_ptr<ITask> task){
         --mNumberOfThreads;
 
     }
+
+    mTasksMap[tId]->run();
 
 }
 
@@ -78,6 +77,8 @@ ThreadPool::~ThreadPool(){
 
 // will pasue thread if its only in a runnung status otherwise it will ignore request and prompt user.
 void ThreadPool::pauseThread(int tId){
+    std::cout<<"The thread number: '"<<tId<<"' is null : '"<<(mTasksMap[tId] == nullptr) <<std::endl;
+
     if(mTasksMap[tId] != nullptr && mTasksMap[tId]->status() == "Running"){
         mTasksMap[tId]->pause();
     }else{

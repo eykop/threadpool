@@ -47,6 +47,7 @@ int main(int argc, char *argv[])
         //get command until whitespace.
         std::string inputCommand;
         std::cout<<StringsConstants::RequestForInputMessage<<std::endl;
+        std::cout<<StringsConstants::HelpMessage<<std::endl;
         std::getline(std::cin, inputCommand, ' ');
 
         //get treadid after whitespace and until new line.

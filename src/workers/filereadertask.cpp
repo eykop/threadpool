@@ -3,6 +3,7 @@
 #include <sstream>
 #include <thread>
 
+
 FileReaderTask::FileReaderTask(const std::string& filePath)
 {
 
@@ -56,7 +57,8 @@ bool FileReaderTask::doWork(){
 
         //get how many bytes we actually have read !
         mTotalReadedSize+=mFin.gcount();
-        std::this_thread::sleep_for(std::chrono::duration<double, std::milli>(1));
+        using namespace std::literals::chrono_literals;
+        std::this_thread::sleep_for(1ms);
         return (mTotalReadedSize < mFileSize);
     }else{
         //file was not open return false!

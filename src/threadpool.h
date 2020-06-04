@@ -26,7 +26,7 @@ private:
 
     std::vector<std::thread> mThreads;
     std::mutex mMutex;
-    std::unordered_map<int,std::shared_ptr<ITask>> mTasksMap;
+    std::unordered_map<int,std::unique_ptr<ITask>> mTasksMap;
     int mNumberOfThreads = 0;
     std::condition_variable mStartContion;
 
