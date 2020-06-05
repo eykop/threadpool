@@ -9,7 +9,8 @@ const char* StringsConstants::HelpMessage = "\r\nThreadPool Program Description:
                                             "1. pause example: pause 1\r\n"
                                             "2. resume example: resume 1\r\n"
                                             "3. stop example: stop 1\r\n"
-                                            "4. status example: status 1\r\n";
+                                            "4. status example: status 1\r\n"
+                                            "5. to stop all example: stop -1\r\n";
 
 const char* StringsConstants::ThreadCountOptionDescription = "start the application with specified number of threads, example: ./threadpool threads 10";
 const char* StringsConstants::InvalidThreadCountInputErrorMessage = "' which is an invalid value for option --threads,\r\n"

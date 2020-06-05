@@ -22,14 +22,15 @@ userinpututils::UserCommand parseUserThreadCommandInput(const std::string& input
         userCommand.command = userinpututils::ThreadCommand::PAUSE;
     } else if (inputCommand == "resume") {
         userCommand.command = userinpututils::ThreadCommand::RESUME;
-    } else if (inputCommand == "stop") {
+    } else if (inputCommand == "stop" && userCommand.threadIndex != -1) {
         userCommand.command = userinpututils::ThreadCommand::STOP;
+    } else if (inputCommand == "stop" && userCommand.threadIndex == -1) {
+        userCommand.command = userinpututils::ThreadCommand::STOP_ALL;
     } else if (inputCommand == "status") {
         userCommand.command = userinpututils::ThreadCommand::STATUS;
     }
-
     return userCommand;
-};
+}
 
 }
 

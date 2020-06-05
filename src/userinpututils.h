@@ -21,7 +21,8 @@ enum class ThreadCommand { INVALID,
     PAUSE,
     RESUME,
     STOP,
-    STATUS };
+    STATUS,
+    STOP_ALL };
 
 struct UserCommand {
     ThreadCommand command = ThreadCommand::INVALID;

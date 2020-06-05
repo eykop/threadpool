@@ -40,6 +40,12 @@ void manageThreadPool(ThreadPool& tp)
             tp.stopThread(userThreadCommand.threadIndex);
             break;
         }
+        case userinpututils::ThreadCommand::STOP_ALL: {
+            for (int i = 0; i < tp.threadsCount(); i++) {
+                tp.stopThread(i);
+            }
+            break;
+        }
         case userinpututils::ThreadCommand::INVALID: {
             std::cout << StringsConstants::UnknownCommnadMessage << std::endl;
             break;

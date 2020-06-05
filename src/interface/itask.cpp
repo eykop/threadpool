@@ -35,6 +35,7 @@ void ITask::stop()
     std::lock_guard<std::mutex> lkg(mStateMutex);
     mStatus = STATUS::STOPPED;
     mStateCondtionVar.notify_one();
+    mNotifyOnfinished();
 }
 
 std::string ITask::status()
