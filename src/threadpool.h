@@ -27,6 +27,7 @@ private:
     int mThreadsCount = 0;
     int mFinishedThreadsCount = 0;
     std::condition_variable mStartContion;
+    std::function<void()> mNotifyOnfinished = nullptr;
 
 public:
     /**
@@ -105,4 +106,10 @@ public:
     [[nodiscard]] bool finished() const;
 
     ~ThreadPool();
+
+    /**
+     * @brief Sets the callback to notify when all thread are finished
+     * @param notifyOnfinished
+     */
+    void setNotifyOnAllFinished(const std::function<void()> notifyOnAllFinished);
 };

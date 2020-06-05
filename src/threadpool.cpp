@@ -35,7 +35,12 @@ void ThreadPool::updateFishiedCount()
 bool ThreadPool::finished() const
 {
     std::cout << "all finished \n";
-    return mFinishedThreadsCount == mThreadsCount;
+    if (mFinishedThreadsCount == mThreadsCount) {
+        mNotifyOnfinished();
+        return true;
+    } else {
+        return false;
+    }
 }
 
 void ThreadPool::startPool()
@@ -133,4 +138,9 @@ std::string ThreadPool::getThreadStatus(int tId)
     } else {
         return "something wrong happend should not get here!, please check thread with id of :" + std::to_string(tId);
     }
+}
+
+void ThreadPool::setNotifyOnAllFinished(const std::function<void()> notifyOnAllFinished)
+{
+    mNotifyOnfinished = notifyOnAllFinished;
 }
