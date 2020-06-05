@@ -8,11 +8,13 @@
 */
 
 #include "threadpool.h"
+#include "src/workers/countertask.h"
 #include "src/workers/filereadertask.h"
 #include "src/workers/filewrittertask.h"
-#include "src/workers/countertask.h"
 
-ThreadPool::ThreadPool(int numberOfThreads) : mThreadsCount(numberOfThreads){
+ThreadPool::ThreadPool(int numberOfThreads)
+    : mThreadsCount(numberOfThreads)
+{
     mThreads.reserve(numberOfThreads);
 }
 
@@ -27,55 +29,53 @@ void ThreadPool::updateFishiedCount()
         //lock to access map...
         std::unique_lock<std::mutex> ulk(mMutex);
         mFinishedThreadsCount++;
-
     }
 }
 
 bool ThreadPool::finished() const
 {
-    std::cout<<"all finished \n";
+    std::cout << "all finished \n";
     return mFinishedThreadsCount == mThreadsCount;
 }
 
-void ThreadPool::startPool(){
+void ThreadPool::startPool()
+{
 
-    for(int i = 0; i < mThreadsCount ; i++){
+    for (int i = 0; i < mThreadsCount; i++) {
         std::unique_ptr<ITask> tsk_shptr;
-        if (i >= 0 && i < 3){
-            std::cout<<"create counter"<<std::endl;
+        if (i >= 0 && i < 3) {
+            std::cout << "create counter" << std::endl;
             tsk_shptr = std::make_unique<CounterTask>(30);
             tsk_shptr->setNotifyOnfinished(std::bind(&ThreadPool::updateFishiedCount, this));
             mThreads.push_back(std::thread(&ThreadPool::startThread, this, i, std::move(tsk_shptr)));
-        }else if (i >= 3 && i < 6){
-            std::cout<<"create file writter"<<std::endl;
-            tsk_shptr = std::make_unique<FileWritterTask>(std::string("largeFile"+std::to_string(i)+".txt"), 1000000000);
+        } else if (i >= 3 && i < 6) {
+            std::cout << "create file writter" << std::endl;
+            tsk_shptr = std::make_unique<FileWritterTask>(std::string("largeFile" + std::to_string(i) + ".txt"), 1000000000);
             tsk_shptr->setNotifyOnfinished(std::bind(&ThreadPool::updateFishiedCount, this));
             mThreads.push_back(std::thread(&ThreadPool::startThread, this, i, std::move(tsk_shptr)));
-        }
-        else{
-            std::cout<<"create file reader"<<std::endl;
+        } else {
+            std::cout << "create file reader" << std::endl;
             tsk_shptr = std::make_unique<FileReaderTask>("largeFile.txt");
             tsk_shptr->setNotifyOnfinished(std::bind(&ThreadPool::updateFishiedCount, this));
             mThreads.push_back(std::thread(&ThreadPool::startThread, this, i, std::move(tsk_shptr)));
         }
     }
-
 }
 
-void ThreadPool::startThread(int tId, std::unique_ptr<ITask> task){
+void ThreadPool::startThread(int tId, std::unique_ptr<ITask> task)
+{
 
     {
         //lock to access map...
         std::unique_lock<std::mutex> ulk(mMutex);
         mTasksMap.emplace(tId, std::move(task));
-
     }
 
     mTasksMap[tId]->run();
-
 }
 
-bool ThreadPool::waitForAllToBeFinished() const{
+bool ThreadPool::waitForAllToBeFinished() const
+{
 
     return (mThreadsCount == 0);
 }
@@ -83,50 +83,54 @@ bool ThreadPool::waitForAllToBeFinished() const{
 /**
     Assure all threads are joind before the threadpool object is destructed.
 */
-ThreadPool::~ThreadPool(){
+ThreadPool::~ThreadPool()
+{
 
-    for(unsigned int i = 0; i < mThreads.size() ; i++){
-        if(mThreads[i].joinable()) {
+    for (unsigned int i = 0; i < mThreads.size(); i++) {
+        if (mThreads[i].joinable()) {
             mThreads[i].join();
         }
     }
-
 }
 
 // will pasue thread if its only in a runnung status otherwise it will ignore request and prompt user.
-void ThreadPool::pauseThread(int tId){
-    std::cout<<"The thread number: '"<<tId<<"' is null : '"<<(mTasksMap[tId] == nullptr) <<std::endl;
+void ThreadPool::pauseThread(int tId)
+{
+    std::cout << "The thread number: '" << tId << "' is null : '" << (mTasksMap[tId] == nullptr) << std::endl;
 
-    if(mTasksMap[tId] != nullptr && mTasksMap[tId]->status() == "Running"){
+    if (mTasksMap[tId] != nullptr && mTasksMap[tId]->status() == "Running") {
         mTasksMap[tId]->pause();
-    }else{
-        std::cout<<"The thread number: '"<<tId<<"' status is : '"<<mTasksMap[tId]->status()<<"', can't be pasues."<<std::endl;
+    } else {
+        std::cout << "The thread number: '" << tId << "' status is : '" << mTasksMap[tId]->status() << "', can't be pasues." << std::endl;
     }
 }
 
 // will reumse thread if its only in a paused status otherwise it will ignore request and prompt user.
-void ThreadPool::resumeThread(int tId){
-    if(mTasksMap[tId] != nullptr && mTasksMap[tId]->status() == "Paused"){
+void ThreadPool::resumeThread(int tId)
+{
+    if (mTasksMap[tId] != nullptr && mTasksMap[tId]->status() == "Paused") {
         mTasksMap[tId]->resume();
-    }else{
-        std::cout<<"The thread number: '"<<tId<<"' status is : '"<<mTasksMap[tId]->status()<<"', can't be resumed."<<std::endl;
+    } else {
+        std::cout << "The thread number: '" << tId << "' status is : '" << mTasksMap[tId]->status() << "', can't be resumed." << std::endl;
     }
 }
 
 // will reumse thread if its only in a not stopped status, otherwise if a thread is already stopped it will ignore request
 // and prompt user.
-void ThreadPool::stopThread(int tId){
-    if(mTasksMap[tId] != nullptr && mTasksMap[tId]->status() != "Stopped" && mTasksMap[tId]->status() != "Finished"){
+void ThreadPool::stopThread(int tId)
+{
+    if (mTasksMap[tId] != nullptr && mTasksMap[tId]->status() != "Stopped" && mTasksMap[tId]->status() != "Finished") {
         mTasksMap[tId]->stop();
-    }else{
-       std::cout<<"The thread number: '"<<tId<<"' status is : '"<<mTasksMap[tId]->status()<<"', can't be stopped."<<std::endl;
+    } else {
+        std::cout << "The thread number: '" << tId << "' status is : '" << mTasksMap[tId]->status() << "', can't be stopped." << std::endl;
     }
 }
 
-std::string ThreadPool::getThreadStatus(int tId){
-    if(mTasksMap[tId] != nullptr){
+std::string ThreadPool::getThreadStatus(int tId)
+{
+    if (mTasksMap[tId] != nullptr) {
         return mTasksMap[tId]->status();
-    }else{
+    } else {
         return "something wrong happend should not get here!, please check thread with id of :" + std::to_string(tId);
     }
 }

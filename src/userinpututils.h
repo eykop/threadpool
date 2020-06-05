@@ -1,15 +1,14 @@
 #pragma once
 
-#include <string>
 #include <memory>
+#include <string>
 
-#include <QCoreApplication>
 #include <QCommandLineParser>
+#include <QCoreApplication>
 
-namespace userinpututils
-{
+namespace userinpututils {
 
-struct ParsedArgumentsResult{
+struct ParsedArgumentsResult {
     int numberOfThreads = 0;
     bool successOnParsing = false;
 };
@@ -18,15 +17,17 @@ std::unique_ptr<QCommandLineParser> defineCommandLineParser(const QCoreApplicati
 
 ParsedArgumentsResult parseCommandLineArgumnets(const std::unique_ptr<QCommandLineParser>& parser);
 
-enum class ThreadCommand { INVALID, PAUSE, RESUME, STOP, STATUS };
+enum class ThreadCommand { INVALID,
+    PAUSE,
+    RESUME,
+    STOP,
+    STATUS };
 
-struct UserCommand{
+struct UserCommand {
     ThreadCommand command = ThreadCommand::INVALID;
     int threadIndex = -1;
 };
 
-
 UserCommand getUserThreadCommandInput();
-
 
 }

@@ -2,8 +2,8 @@
 
 #include <string>
 
-class  StringsConstants{
-   public :
+class StringsConstants {
+public:
     static const char* HelpMessage;
     static const char* ThreadCountOptionDescription;
     static const char* InvalidThreadCountInputErrorMessage;
@@ -13,4 +13,3 @@ class  StringsConstants{
     static const char* UnknownCommnadMessage;
     static const char* DoneMessage;
 };
-

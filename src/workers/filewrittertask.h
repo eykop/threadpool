@@ -1,12 +1,11 @@
 #pragma once
 #include "src/interface/itask.h"
 
-#include <string>
 #include <fstream>
+#include <string>
 #include <vector>
 
-class FileWritterTask : public ITask
-{
+class FileWritterTask : public ITask {
 private:
     std::string mFilePath;
     std::ofstream mFout;

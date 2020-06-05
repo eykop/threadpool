@@ -9,30 +9,30 @@
 #pragma once
 
 #include <condition_variable>
+#include <functional>
+#include <iostream>
 #include <mutex>
 #include <string>
-#include <iostream>
-#include <functional>
 
-
-
-class ITask{
+class ITask {
 
 protected:
-    enum class STATUS { INITIALIZED, RUNNING, PAUSED, STOPPED, FINISHED };
+    enum class STATUS { INITIALIZED,
+        RUNNING,
+        PAUSED,
+        STOPPED,
+        FINISHED };
     std::condition_variable mStateCondtionVar;
     std::mutex mStateMutex;
     bool mPaused = false;
     bool mStopped = false;
     STATUS mStatus = STATUS::INITIALIZED;
-    std::function<void()> mNotifyOnfinished  = nullptr;
+    std::function<void()> mNotifyOnfinished = nullptr;
 
 public:
     ITask() = default;
     ITask& operator=(const ITask&) = delete;
     ITask(const ITask&) = delete;
-
-
 
     /**
         Pure method, inherting classes must implement this methoid, this were
@@ -44,7 +44,6 @@ public:
         @return bool, ture if there is more work to do, false if work is done.
     */
     [[nodiscard]] virtual bool doWork() = 0;
-
 
     /**
         Pauses the task.

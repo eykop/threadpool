@@ -10,12 +10,11 @@
 #pragma once
 #include "src/interface/itask.h"
 
-#include <string>
 #include <fstream>
+#include <string>
 #include <vector>
 
-class FileReaderTask : public ITask
-{
+class FileReaderTask : public ITask {
 private:
     std::string mFilePath;
     std::ifstream mFin;
@@ -33,7 +32,6 @@ private:
     void init();
 
 public:
-
     /**
         Constructor, assign required filepath to read.
     */

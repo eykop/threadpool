@@ -10,23 +10,20 @@
 #pragma once
 #include "src/interface/itask.h"
 
-#include <vector>
-#include <queue>
-#include <mutex>
-#include <iostream>
-#include <unordered_map>
 #include <condition_variable>
+#include <iostream>
 #include <memory>
+#include <mutex>
+#include <queue>
 #include <thread>
+#include <unordered_map>
+#include <vector>
 
-
-class ThreadPool
-{
+class ThreadPool {
 private:
-
     std::vector<std::thread> mThreads;
     std::mutex mMutex;
-    std::unordered_map<int,std::unique_ptr<ITask>> mTasksMap;
+    std::unordered_map<int, std::unique_ptr<ITask>> mTasksMap;
     int mThreadsCount = 0;
     int mFinishedThreadsCount = 0;
     std::condition_variable mStartContion;
@@ -37,8 +34,7 @@ public:
     */
     ThreadPool(int numberOfThreads);
     ThreadPool(const ThreadPool& other) = delete;
-    ThreadPool& operator=(const ThreadPool& other) = delete ;
-
+    ThreadPool& operator=(const ThreadPool& other) = delete;
 
     /**
         startPool a thread  pool while assignig tasks to required threads.
@@ -109,6 +105,4 @@ public:
     [[nodiscard]] bool finished() const;
 
     ~ThreadPool();
-
-
 };

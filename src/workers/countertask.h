@@ -11,8 +11,7 @@
 
 #include "src/interface/itask.h"
 
-class CounterTask : public ITask
-{
+class CounterTask : public ITask {
 private:
     int mI = 1;
     int mCounter = 0;
@@ -24,5 +23,4 @@ public:
     */
     CounterTask(const int counter);
     virtual ~CounterTask();
-
 };
