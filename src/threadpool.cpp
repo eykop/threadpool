@@ -1,8 +1,8 @@
 /**
     threadpool.cpp
-    Purpose: initiate number of threads while assiging task
-    to each thread , is also allow to cotrol progress of tasks
-    while providing stop, puase , resume and status operation on each thread.
+    Purpose: initiate number of threads while assigning task
+    to each thread , is also allow to control progress of tasks
+    while providing stop, pause , resume and status operation on each thread.
 
     @author Eyas Kopty
 */
@@ -53,7 +53,7 @@ void ThreadPool::startPool()
             tsk_shptr->setNotifyOnFinished(std::bind(&ThreadPool::updateFinishedCount, this));
             mThreads.push_back(std::thread(&ThreadPool::startThread, this, i, std::move(tsk_shptr)));
         } else if (i >= 3 && i < 6) {
-            std::cout << "create file writter" << std::endl;
+            std::cout << "create file writer" << std::endl;
             tsk_shptr = std::make_unique<FileWriterTask>(std::string("largeFile" + std::to_string(i) + ".txt"), 1000000000);
             tsk_shptr->setNotifyOnFinished(std::bind(&ThreadPool::updateFinishedCount, this));
             mThreads.push_back(std::thread(&ThreadPool::startThread, this, i, std::move(tsk_shptr)));
@@ -78,12 +78,6 @@ void ThreadPool::startThread(int tId, std::unique_ptr<ITask> task)
     mTasksMap[tId]->run();
 }
 
-bool ThreadPool::waitForAllToBeFinished() const
-{
-
-    return (mThreadsCount == 0);
-}
-
 /**
     Assure all threads are joined before the threadpool object is destructed.
 */
@@ -97,7 +91,7 @@ ThreadPool::~ThreadPool()
     }
 }
 
-// will pasue thread if its only in a running status otherwise it will ignore request and prompt user.
+// will pause thread if its only in a running status otherwise it will ignore request and prompt user.
 void ThreadPool::pauseThread(int tId)
 {
     std::cout << "The thread number: '" << tId << "' is null : '" << (mTasksMap[tId] == nullptr) << std::endl;

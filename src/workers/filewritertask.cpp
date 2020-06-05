@@ -1,8 +1,8 @@
-#include "src/workers/filewrittertask.h"
+#include "filewritertask.h"
 
 #include <thread>
 
-FileWritterTask::FileWritterTask(const std::string& filePath, const int requiredFileSize)
+FileWriterTask::FileWriterTask(const std::string& filePath, int requiredFileSize)
     : mFilePath(filePath)
     , mFileSize(requiredFileSize)
 {
@@ -10,7 +10,7 @@ FileWritterTask::FileWritterTask(const std::string& filePath, const int required
     init();
 }
 
-void FileWritterTask::init()
+void FileWriterTask::init()
 {
     mFout.open(mFilePath.c_str(), std::ios::binary | std::ios::out);
     if (!mFout.is_open()) {
@@ -26,7 +26,7 @@ void FileWritterTask::init()
 
     @return bool, ture if there is more work to do, false if work is done.
 */
-bool FileWritterTask::doWork()
+bool FileWriterTask::doWork()
 {
 
     if (mFout.is_open()) {
@@ -43,7 +43,7 @@ bool FileWritterTask::doWork()
     }
 }
 
-FileWritterTask::~FileWritterTask()
+FileWriterTask::~FileWriterTask()
 {
 
     if (mFout.is_open()) {

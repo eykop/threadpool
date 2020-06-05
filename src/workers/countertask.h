@@ -1,6 +1,6 @@
 /**
     countertask.h
-    Purpose: Provide an example for implemnting the ITask interface inorder to be allowed to run in the thread pool.
+    Purpose: Provide an example for implementing the ITask interface inorder to be allowed to run in the thread pool.
     IT just count to required Number, while sleeping between each count to allow good demonstration of
     pause, resume , stop and status capabilities of the interface.
 
@@ -21,6 +21,6 @@ public:
     /**
         Constructor, assign required number to count until.
     */
-    CounterTask(const int counter);
-    virtual ~CounterTask();
+    explicit CounterTask(const int counter);
+    virtual ~CounterTask() = default;
 };

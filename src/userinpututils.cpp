@@ -52,7 +52,7 @@ std::unique_ptr<QCommandLineParser> defineCommandLineParser(const QCoreApplicati
     return parser;
 };
 
-ParsedArgumentsResult parseCommandLineArgumnets(const std::unique_ptr<QCommandLineParser>& parser)
+ParsedArgumentsResult parseCommandLineArguments(const std::unique_ptr<QCommandLineParser>& parser)
 {
 
     const QStringList args = parser->optionNames();

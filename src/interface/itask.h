@@ -27,7 +27,7 @@ protected:
     bool mPaused = false;
     bool mStopped = false;
     STATUS mStatus = STATUS::INITIALIZED;
-    std::function<void()> mNotifyOnfinished = nullptr;
+    std::function<void()> mNotifyOnFinished = nullptr;
 
 public:
     ITask() = default;
@@ -35,9 +35,9 @@ public:
     ITask(const ITask&) = delete;
 
     /**
-        Pure method, inherting classes must implement this methoid, this were
+        Pure method, inheriting classes must implement this method, this were
         actually the task will do its work, this method should work with small chuck of the work on each call
-        as it will called iterativly to allow pasue and resume for the task.
+        as it will called iteratively to allow pause and resume for the task.
         it will return false when there is no more work to do(when its done),
         otherwise it will return true.
 
@@ -81,11 +81,11 @@ public:
     */
     virtual void run();
 
-    virtual ~ITask();
+    virtual ~ITask() = default;
 
     /**
      * @brief Sets the callback to notify when task is finished
-     * @param notifyOnfinished
+     * @param notifyOnFinished
      */
-    void setNotifyOnfinished(const std::function<void()> notifyOnfinished);
+    void setNotifyOnFinished(const std::function<void()> notifyOnFinished);
 };

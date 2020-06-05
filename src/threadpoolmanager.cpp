@@ -49,7 +49,7 @@ void manageThreadPool(ThreadPool& tp)
         }
         }
 
-        //to do std::bind to notirfy of done for each thread instead of looping!
+        //to do std::bind to notify of done for each thread instead of looping!
         if (tp.finished()) {
             std::cout << StringsConstants::DoneMessage << std::endl;
             break;
@@ -57,4 +57,4 @@ void manageThreadPool(ThreadPool& tp)
     }
 }
 
-};
+}

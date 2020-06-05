@@ -15,7 +15,7 @@ struct ParsedArgumentsResult {
 
 std::unique_ptr<QCommandLineParser> defineCommandLineParser(const QCoreApplication& app);
 
-ParsedArgumentsResult parseCommandLineArgumnets(const std::unique_ptr<QCommandLineParser>& parser);
+ParsedArgumentsResult parseCommandLineArguments(const std::unique_ptr<QCommandLineParser>& parser);
 
 enum class ThreadCommand { INVALID,
     PAUSE,

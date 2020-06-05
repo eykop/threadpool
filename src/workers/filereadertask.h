@@ -1,6 +1,6 @@
 /**
     filereadertask.h
-    Purpose: Provide an example for implemnting the ITask interface inorder to be allowed to run in the thread pool.
+    Purpose: Provide an example for implementing the ITask interface inorder to be allowed to run in the thread pool.
     Reads a large file part by part while counting how many words there are int the file , this will allow good demonstration of
     pause, resume , stop and status capabilities of the interface.
 
@@ -35,6 +35,6 @@ public:
     /**
         Constructor, assign required filepath to read.
     */
-    FileReaderTask(const std::string& filePath);
+    explicit FileReaderTask(const std::string& filePath);
     virtual ~FileReaderTask();
 };

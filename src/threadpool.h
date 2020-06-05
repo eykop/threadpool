@@ -26,14 +26,13 @@ private:
     std::unordered_map<int, std::unique_ptr<ITask>> mTasksMap;
     int mThreadsCount = 0;
     int mFinishedThreadsCount = 0;
-    std::condition_variable mStartCondition;
     std::function<void()> mNotifyOnFinished = nullptr;
 
 public:
     /**
         Constructor, assign required number of threads to run in the thread pool.
     */
-    ThreadPool(int numberOfThreads);
+    explicit ThreadPool(int numberOfThreads);
     ThreadPool(const ThreadPool& other) = delete;
     ThreadPool& operator=(const ThreadPool& other) = delete;
 
@@ -84,24 +83,18 @@ public:
     void startThread(int tId, std::unique_ptr<ITask> task);
 
     /**
-        Check if all threads are done.
-        @return bool, true if all threads are done false otherwise
-    */
-    [[nodiscard]] bool waitForAllToBeFinished() const;
-
-    /**
         Return current number of running threads.
         @return int, current number of running threads.
     */
     [[nodiscard]] int threadsCount() const;
 
     /**
-      Updates finsihed threads count.
+      Updates finished threads count.
     */
     void updateFinishedCount();
 
     /**
-      Check if all threads in pool are finsihed or not.
+      Check if all threads in pool are finished or not.
     */
     [[nodiscard]] bool finished() const;
 

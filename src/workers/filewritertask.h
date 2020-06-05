@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-class FileWritterTask : public ITask {
+class FileWriterTask : public ITask {
 private:
     std::string mFilePath;
     std::ofstream mFout;
@@ -20,6 +20,6 @@ private:
     void init();
 
 public:
-    FileWritterTask(const std::string& filePath, const int requiredFileSize);
-    virtual ~FileWritterTask();
+    explicit FileWriterTask(const std::string& filePath, int requiredFileSize);
+    virtual ~FileWriterTask();
 };

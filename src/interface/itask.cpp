@@ -1,8 +1,8 @@
 #include "itask.h"
 
-void ITask::setNotifyOnfinished(const std::function<void()> notifyOnfinished)
+void ITask::setNotifyOnFinished(const std::function<void()> notifyOnFinished)
 {
-    mNotifyOnfinished = notifyOnfinished;
+    mNotifyOnFinished = notifyOnFinished;
 }
 
 void ITask::pause()
@@ -35,7 +35,7 @@ void ITask::stop()
     std::lock_guard<std::mutex> lkg(mStateMutex);
     mStatus = STATUS::STOPPED;
     mStateCondtionVar.notify_one();
-    mNotifyOnfinished();
+    mNotifyOnFinished();
 }
 
 std::string ITask::status()
@@ -75,10 +75,6 @@ void ITask::run()
         return;
     }
     mStatus = STATUS::FINISHED;
-    mNotifyOnfinished();
+    mNotifyOnFinished();
     std::cout << "finished.." << std::endl;
-}
-
-ITask::~ITask()
-{
 }
