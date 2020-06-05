@@ -1,8 +1,8 @@
 /**
     threadpool.h
-    Purpose: initiate number of threads while assiging task
-    to each thread , is also allow to cotrol progress of tasks
-    while providing stop, puase , resume and status operation on each thread.
+    Purpose: initiate number of threads while assigning task
+    to each thread , is also allow to control progress of tasks
+    while providing stop, pause , resume and status operation on each thread.
 
     @author Eyas Kopty
 */
@@ -26,8 +26,8 @@ private:
     std::unordered_map<int, std::unique_ptr<ITask>> mTasksMap;
     int mThreadsCount = 0;
     int mFinishedThreadsCount = 0;
-    std::condition_variable mStartContion;
-    std::function<void()> mNotifyOnfinished = nullptr;
+    std::condition_variable mStartCondition;
+    std::function<void()> mNotifyOnFinished = nullptr;
 
 public:
     /**
@@ -38,7 +38,7 @@ public:
     ThreadPool& operator=(const ThreadPool& other) = delete;
 
     /**
-        startPool a thread  pool while assignig tasks to required threads.
+        startPool a thread  pool while assigning tasks to required threads.
         @return void.
     */
     void startPool();
@@ -98,7 +98,7 @@ public:
     /**
       Updates finsihed threads count.
     */
-    void updateFishiedCount();
+    void updateFinishedCount();
 
     /**
       Check if all threads in pool are finsihed or not.
@@ -108,8 +108,8 @@ public:
     ~ThreadPool();
 
     /**
-     * @brief Sets the callback to notify when all thread are finished
-     * @param notifyOnfinished
+     * @brief Sets the callback to notify when all threads are finished
+     * @param notifyOnAllFinished
      */
-    void setNotifyOnAllFinished(const std::function<void()> notifyOnAllFinished);
+    void setNotifyOnAllFinished(const std::function<void()>& notifyOnAllFinished);
 };

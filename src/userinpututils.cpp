@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+#include <QCommandLineOption>
+
 namespace {
 
 userinpututils::UserCommand parseUserThreadCommandInput(const std::string& inputCommand, const std::string& threadNumber)

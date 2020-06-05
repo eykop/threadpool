@@ -10,6 +10,6 @@ public:
     static const char* RequestForInputMessage;
     static const char* RequestForValidThreadNumberMessage;
     static const char* RequestForInRangeThreadNumberMessage;
-    static const char* UnknownCommnadMessage;
+    static const char* UnknownCommandMessage;
     static const char* DoneMessage;
 };

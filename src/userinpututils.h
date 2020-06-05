@@ -9,7 +9,7 @@
 namespace userinpututils {
 
 struct ParsedArgumentsResult {
-    int numberOfThreads = 0;
+    int threadsCount = 0;
     bool successOnParsing = false;
 };
 
