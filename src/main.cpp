@@ -79,9 +79,13 @@ int main(int argc, char* argv[])
 
     // we manage the threads/tasks in a separate thread sho that we allow the application to work on other things.
     // we could make this run in main thread, but then it would be diffcult to gently exits the application.
-    // as the manage function will block the main thread and the app exit call will happen before we start the application event loop
-    // which will not be triggered correctly and the application will never exits as a result of that.
-    std::thread t1([&tp] { manageThreadPool(tp); });
+    // as the manage function will block the main thread and the app exit call will happen before we start the application
+    // event loop which in turn is a blocking call, and will not be triggered correctly so we end up with the application
+    // never exiting as a result of that.
+    std::thread managingThread([&tp] { manageThreadPool(tp); });
+
+    //make sure we allow the thread to finish before be termintae the application.
+    QObject::connect(&app, &QCoreApplication::aboutToQuit, [&managingThread]() { managingThread.join(); });
 
     return app.exec();
 }
